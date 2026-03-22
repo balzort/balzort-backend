@@ -18,7 +18,7 @@ export async function onTournamentClosed(
     return;
   }
 
-  const alreadyProcessed = await ActivityModel.alreadyProcessed(sig);
+  const alreadyProcessed = await ActivityModel.alreadyProcessed(sig, "tournament_closed");
   if (alreadyProcessed) return;
 
   const tournamentData = await fetchTournamentByAddress(tournamentAddress);
