@@ -5,7 +5,7 @@
   "description": "Ball Sort on-chain puzzle game backend",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm install --frozen-lockfile && tsc",
+    "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch --import dotenv/config src/index.ts"
