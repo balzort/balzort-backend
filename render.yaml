@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: ball-sort-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PRIVY_APP_ID
+        sync: false
+      - key: PRIVY_APP_SECRET
+        sync: false
+      - key: PRIVY_VERIFICATION_KEY
+        sync: false
+      - key: RPC_URL
+        sync: false
+      - key: HELIUS_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_WALLETS
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
