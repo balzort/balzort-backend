@@ -65,7 +65,7 @@ async function recomputeTier(difficulty: number | null): Promise<void> {
   const wallets = sorted.map(([w]) => w);
   const { data: players } = await supabase
     .from("players")
-    .select("embedded_wallet_address, wallet_address, username, avatar_url, current_streak")
+    .select("embedded_wallet_address, wallet_address, username, avatar_url")
     .in("embedded_wallet_address", wallets);
 
   const playerMap = new Map<string, any>();
@@ -86,7 +86,6 @@ async function recomputeTier(difficulty: number | null): Promise<void> {
       total_solved: agg.total_solved,
       best_score: agg.best_score,
       avg_score: Math.round(agg.score_sum / agg.total_solved),
-      current_streak: player?.current_streak ?? 0,
       updated_at: new Date().toISOString(),
     };
   });

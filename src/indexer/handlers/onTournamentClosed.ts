@@ -1,5 +1,6 @@
 import { TournamentModel } from "../../models/Tournament.js";
 import { ActivityModel } from "../../models/Activity.js";
+import { TournamentEntryModel } from "../../models/TournamentEntry.js";
 import { fetchTournamentByAddress } from "../../solana/accounts/fetchTournament.js";
 import { WebSocketService } from "../../services/websocket.service.js";
 import { WS_EVENTS } from "../../utils/constants.js";
@@ -43,6 +44,25 @@ export async function onTournamentClosed(
       cumulative_weight: tournamentData.cumulativeWeight.toString(),
       is_closed: true,
     });
+
+    const entries = await TournamentEntryModel.findByTournament(tournamentAddress);
+    const cumulativeWeight = BigInt(tournamentData.cumulativeWeight.toString());
+    const netPrizePool = BigInt(tournamentData.netPrizePool.toString());
+    const totalEntries = BigInt(tournamentData.totalEntries);
+
+    for (const entry of entries) {
+      let expectedAmount = 0n;
+      if (cumulativeWeight === 0n) {
+        if (totalEntries > 0n) {
+           expectedAmount = netPrizePool / totalEntries;
+        }
+      } else if (entry.completed) {
+        const entryWeight = BigInt(entry.parimutuel_weight ?? "0");
+        expectedAmount = (entryWeight * netPrizePool) / cumulativeWeight;
+      }
+      
+      await TournamentEntryModel.updateExpectedPrize(entry.id, expectedAmount.toString());
+    }
   }
 
   await ActivityModel.log({

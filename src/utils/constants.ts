@@ -13,6 +13,7 @@ export const SEEDS = {
   PUZZLE_STATS: Buffer.from("puzzle_stats"),
   TOURNAMENT: Buffer.from("tournament"),
   TOURNAMENT_ENTRY: Buffer.from("tournament_entry"),
+  TOURNAMENT_VAULT: Buffer.from("tournament_vault"),
 } as const;
 
 

@@ -9,6 +9,8 @@ import {
   walletParamSchema,
 } from "../utils/validator.js";
 import { difficultyLabel } from "../utils/constants.js";
+import { PublicKey } from "@solana/web3.js";
+import { getPlayerPda } from "../solana/accounts/fetchPlayer.js";
 
 export class TournamentController {
   /**
@@ -96,7 +98,7 @@ export class TournamentController {
 
       const ranked = entries.map((e, i) => ({
         rank: i + 1,
-        player_wallet: e.player_wallet,
+        player_account: e.player_account,
         parimutuel_weight: e.parimutuel_weight,
         elapsed_secs: e.elapsed_secs,
         move_count: e.move_count,
@@ -125,7 +127,10 @@ export class TournamentController {
   static async getPlayerTournaments(req: FastifyRequest, reply: FastifyReply) {
     try {
       const { wallet } = walletParamSchema.parse(req.params);
-      const entries = await TournamentEntryModel.findByPlayer(wallet);
+      const playerPk = new PublicKey(wallet);
+      const playerPda = getPlayerPda(playerPk);
+      
+      const entries = await TournamentEntryModel.findByPlayer(playerPda.toBase58());
 
       return sendSuccess(reply, { entries });
     } catch (error) {

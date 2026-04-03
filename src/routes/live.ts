@@ -7,10 +7,13 @@ export async function liveRoutes(app: FastifyInstance): Promise<void> {
 
     socket.send(
       JSON.stringify({
-        event: "connected",
+        type: "connected",
         data: { message: "Ball Sort live feed connected" },
         timestamp: Date.now(),
       })
     );
+
+    // Clean up on disconnect so dead sockets don't linger in the set
+    socket.on("close", () => WebSocketService.removeClient(socket));
   });
 }

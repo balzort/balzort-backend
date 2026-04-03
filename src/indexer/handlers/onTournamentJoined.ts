@@ -55,6 +55,8 @@ export async function onTournamentJoined(
         net_prize_pool:    tournamentData.netPrizePool.toString(),
         treasury_fee_bps:  tournamentData.treasuryFeeBps,
         difficulty:        tournamentData.difficulty,
+        num_tubes:         tournamentData.numTubes,
+        balls_per_tube:    tournamentData.ballsPerTube,
         start_time:        tournamentData.startTime,
         end_time:          tournamentData.endTime,
         total_entries:     tournamentData.totalEntries,
@@ -70,9 +72,10 @@ export async function onTournamentJoined(
       if (dbTournament) {
         await TournamentEntryModel.upsert({
           tournament_id:          dbTournament.id,
+          on_chain_tournament_id: dbTournament.on_chain_id,
           on_chain_entry_address: entryData.address,       // ← fixed field name
           tournament_address:     tournamentAddress,        // ← fixed field name
-          player_wallet:          playerWallet,
+          player_account:         playerWallet,             // renaming column
           entry_deposit:          entryData.entryDeposit.toString(),
           parimutuel_weight:      entryData.parimutuelWeight.toString(),
           completed:              entryData.completed,

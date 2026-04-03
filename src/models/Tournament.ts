@@ -5,11 +5,14 @@ export interface TournamentRow {
   on_chain_address: string;        // tournament PDA pubkey
   on_chain_id: string;             // tournament_id (u64 as string)
   authority: string;
+  token_mint?: string | null;
   entry_fee: string;               // lamports as string (bigint safe)
   prize_pool: string;
   net_prize_pool: string;
   treasury_fee_bps: number;
   difficulty: number;
+  num_tubes: number;
+  balls_per_tube: number;
   start_time: string;              // ISO timestamp
   end_time: string;
   total_entries: number;
@@ -24,11 +27,14 @@ export interface UpsertTournamentPayload {
   on_chain_address: string;
   on_chain_id: string;
   authority: string;
+  token_mint?: string;
   entry_fee: string;
   prize_pool: string;
   net_prize_pool: string;
   treasury_fee_bps: number;
   difficulty: number;
+  num_tubes: number;
+  balls_per_tube: number;
   start_time: number;   // unix seconds
   end_time: number;
   total_entries: number;
@@ -46,11 +52,14 @@ export class TournamentModel {
           on_chain_address: payload.on_chain_address,
           on_chain_id: payload.on_chain_id,
           authority: payload.authority,
+          token_mint: payload.token_mint,
           entry_fee: payload.entry_fee,
           prize_pool: payload.prize_pool,
           net_prize_pool: payload.net_prize_pool,
           treasury_fee_bps: payload.treasury_fee_bps,
           difficulty: payload.difficulty,
+          num_tubes: payload.num_tubes,
+          balls_per_tube: payload.balls_per_tube,
           start_time: new Date(payload.start_time * 1000).toISOString(),
           end_time: new Date(payload.end_time * 1000).toISOString(),
           total_entries: payload.total_entries,
@@ -120,13 +129,11 @@ export class TournamentModel {
     return { data: (data ?? []) as TournamentRow[], total: count ?? 0 };
   }
 
-  static async findOpenTournaments(): Promise<TournamentRow[]> {
-    const now = new Date().toISOString();
+  static async findUnclosedTournaments(): Promise<TournamentRow[]> {
     const { data, error } = await supabase
       .from("tournaments")
       .select("*")
       .eq("is_closed", false)
-      .gt("end_time", now)
       .order("end_time", { ascending: true });
 
     if (error) throw error;
@@ -151,5 +158,15 @@ export class TournamentModel {
       .eq("on_chain_address", onChainAddress);
 
     if (error) throw error;
+  }
+
+  static async findClosedTournaments(): Promise<TournamentRow[]> {
+    const { data, error } = await supabase
+      .from("tournaments")
+      .select("*")
+      .eq("is_closed", true);
+
+    if (error) throw error;
+    return (data ?? []) as TournamentRow[];
   }
 }

@@ -1,8 +1,8 @@
 import { supabase } from "../config/supabase.js";
 
-const LOG_MAX_RETRIES   = 4;
+const LOG_MAX_RETRIES = 4;
 const LOG_RETRY_BASE_MS = 500;
-const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 export type ActivityEventType =
   | "puzzle_initialized"
@@ -56,14 +56,14 @@ export class ActivityModel {
         const { data, error } = await supabase
           .from("activity")
           .insert({
-            event_type:          payload.event_type,
-            player_wallet:       payload.player_wallet        ?? null,
-            tournament_address:  payload.tournament_address   ?? null,
-            puzzle_board_pubkey: payload.puzzle_board_pubkey  ?? null,
-            puzzle_stats_pubkey: payload.puzzle_stats_pubkey  ?? null,
-            tx_signature:        payload.tx_signature         ?? null,
-            slot:                payload.slot                 ?? null,
-            block_time:          payload.block_time
+            event_type: payload.event_type,
+            player_wallet: payload.player_wallet ?? null,
+            tournament_address: payload.tournament_address ?? null,
+            puzzle_board_pubkey: payload.puzzle_board_pubkey ?? null,
+            puzzle_stats_pubkey: payload.puzzle_stats_pubkey ?? null,
+            tx_signature: payload.tx_signature ?? null,
+            slot: payload.slot ?? null,
+            block_time: payload.block_time
               ? new Date(payload.block_time * 1000).toISOString()
               : null,
             raw_data: payload.raw_data,
@@ -80,7 +80,7 @@ export class ActivityModel {
         if (attempt < LOG_MAX_RETRIES) {
           const delay = LOG_RETRY_BASE_MS * Math.pow(2, attempt - 1);
           console.warn(
-            `⚠️  [ActivityModel.log] ${payload.event_type} failed (attempt ${attempt}/${LOG_MAX_RETRIES}): ${err.message} — retrying in ${delay}ms`
+            `⚠️  [ActivityModel.log] ${payload.event_type} failed (attempt ${attempt}/${LOG_MAX_RETRIES}): ${err.message} — retrying in ${delay}ms`,
           );
           await sleep(delay);
         } else {
@@ -104,7 +104,7 @@ export class ActivityModel {
    */
   static async alreadyProcessed(
     txSignature: string,
-    eventType: ActivityEventType
+    eventType: ActivityEventType,
   ): Promise<boolean> {
     const { data } = await supabase
       .from("activity")
@@ -117,7 +117,10 @@ export class ActivityModel {
     return !!data;
   }
 
-  static async findByPlayer(playerWallet: string, limit = 50): Promise<ActivityRow[]> {
+  static async findByPlayer(
+    playerWallet: string,
+    limit = 50,
+  ): Promise<ActivityRow[]> {
     const { data, error } = await supabase
       .from("activity")
       .select("*")
@@ -129,7 +132,10 @@ export class ActivityModel {
     return (data ?? []) as ActivityRow[];
   }
 
-  static async findByTournament(tournamentAddress: string, limit = 100): Promise<ActivityRow[]> {
+  static async findByTournament(
+    tournamentAddress: string,
+    limit = 100,
+  ): Promise<ActivityRow[]> {
     const { data, error } = await supabase
       .from("activity")
       .select("*")

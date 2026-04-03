@@ -187,6 +187,83 @@ export class UserController {
       const tx = new Transaction();
       tx.add(ix);
 
+      // ── Airdrop 1,000 Custom Tokens ─────────────────────────────────────────
+      try {
+        const {
+          createAssociatedTokenAccountInstruction,
+          getAssociatedTokenAddress,
+          createTransferInstruction,
+          getAccount,
+          getMint
+        } = await import("@solana/spl-token");
+
+        const tokenMintPubkey = new PublicKey(env.GAME_TOKEN_MINT);
+        
+        // Dynamically deduce the token program (supports both Token and Token-2022)
+        const mintAccountInfo = await connection.getAccountInfo(tokenMintPubkey);
+        if (!mintAccountInfo) {
+          throw new Error("Game Token Mint not found on-chain");
+        }
+        const tokenProgramId = mintAccountInfo.owner;
+
+        const serverTokenAccount = await getAssociatedTokenAddress(tokenMintPubkey, serverWallet.publicKey, false, tokenProgramId);
+        const playerTokenAccount = await getAssociatedTokenAddress(tokenMintPubkey, signerPubkey, false, tokenProgramId);
+
+        // Fetch Mint Info using the correct dynamically resolved programId
+        const mintInfo = await getMint(connection, tokenMintPubkey, undefined, tokenProgramId);
+        
+        // Ensure Server ATA exists
+        try {
+          await getAccount(connection, serverTokenAccount, undefined, tokenProgramId);
+        } catch (err: any) {
+          if (err.name === "TokenAccountNotFoundError" || err.message.includes("could not find account") || err.name === "TokenInvalidAccountOwnerError") {
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                serverWallet.publicKey,
+                serverTokenAccount,
+                serverWallet.publicKey,
+                tokenMintPubkey,
+                tokenProgramId
+              )
+            );
+          }
+        }
+
+        // Ensure Player ATA exists
+        try {
+          await getAccount(connection, playerTokenAccount, undefined, tokenProgramId);
+        } catch (err: any) {
+          if (err.name === "TokenAccountNotFoundError" || err.message.includes("could not find account") || err.name === "TokenInvalidAccountOwnerError") {
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                serverWallet.publicKey,    // Server pays the rent unconditionally
+                playerTokenAccount,
+                signerPubkey,              // Player owns the token account natively
+                tokenMintPubkey,
+                tokenProgramId
+              )
+            );
+          }
+        }
+
+        // Force exactly 1,000 tokens explicitly
+        const amount = BigInt(1000) * BigInt(Math.pow(10, mintInfo.decimals));
+
+        // Transfer tokens from Server ATA to Player ATA
+        tx.add(
+          createTransferInstruction(
+            serverTokenAccount,
+            playerTokenAccount,
+            serverWallet.publicKey,
+            amount,
+            [],
+            tokenProgramId
+          )
+        );
+      } catch (airdropError) {
+        console.error("⚠️ [UserController] Failed to append Airdrop Instructions. Server Wallet likely missing SPL tokens or ATA:", airdropError);
+      }
+
       // Server wallet is both the fee payer and the rent payer.
       // The embedded wallet only needs to sign — it needs zero SOL.
       tx.feePayer = serverWallet.publicKey;

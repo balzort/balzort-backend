@@ -127,8 +127,6 @@ export class EventIndexer {
     return all;
   }
 
-
-
   private async poll(): Promise<void> {
     try {
       const opts: { limit: number; until?: string } = { limit: 50 };
@@ -153,9 +151,6 @@ export class EventIndexer {
       console.error(`❌ [EventIndexer] Poll error: ${err.message}`);
     }
   }
-
-
-
 
   private async processSig(
     sig: string,
@@ -227,8 +222,6 @@ export class EventIndexer {
       );
     }
   }
-
-
 
   private async fetchWithRetry(
     sig: string,

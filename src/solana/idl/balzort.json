@@ -383,6 +383,28 @@
           "signer": true
         },
         {
+          "name": "player_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
           "name": "tournament",
           "writable": true,
           "pda": {
@@ -399,6 +421,43 @@
                   109,
                   101,
                   110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "Tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "tournament_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
                   116
                 ]
               },
@@ -446,6 +505,13 @@
               }
             ]
           }
+        },
+        {
+          "name": "player_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
         },
         {
           "name": "system_program",
@@ -511,7 +577,8 @@
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "payer",
+          "writable": true,
           "signer": true
         },
         {
@@ -543,6 +610,43 @@
           }
         },
         {
+          "name": "token_mint"
+        },
+        {
+          "name": "tournament_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "Tournament"
+              }
+            ]
+          }
+        },
+        {
           "name": "game",
           "pda": {
             "seeds": [
@@ -559,8 +663,11 @@
           }
         },
         {
-          "name": "treasury",
+          "name": "treasury_token_account",
           "writable": true
+        },
+        {
+          "name": "token_program"
         },
         {
           "name": "system_program",
@@ -825,6 +932,9 @@
           }
         },
         {
+          "name": "token_mint"
+        },
+        {
           "name": "tournament",
           "writable": true,
           "pda": {
@@ -851,6 +961,43 @@
               }
             ]
           }
+        },
+        {
+          "name": "tournament_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game.tournament_count",
+                "account": "Game"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
         },
         {
           "name": "system_program",
@@ -1670,6 +1817,11 @@
       ],
       "accounts": [
         {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
           "name": "signer",
           "writable": true,
           "signer": true
@@ -1725,6 +1877,47 @@
           }
         },
         {
+          "name": "token_mint"
+        },
+        {
+          "name": "tournament_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "Tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_token_account",
+          "writable": true
+        },
+        {
           "name": "tournament_entry",
           "writable": true,
           "pda": {
@@ -1762,11 +1955,19 @@
           }
         },
         {
+          "name": "token_program"
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
       "name": "open_session",
@@ -1872,8 +2073,31 @@
       ],
       "accounts": [
         {
-          "name": "player",
+          "name": "signer",
           "signer": true
+        },
+        {
+          "name": "player",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player.wallet",
+                "account": "Player"
+              }
+            ]
+          }
         },
         {
           "name": "tournament",
@@ -1935,22 +2159,47 @@
               },
               {
                 "kind": "account",
+                "path": "player.wallet",
+                "account": "Player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "puzzle_stats",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  122,
+                  122,
+                  108,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
                 "path": "player"
+              },
+              {
+                "kind": "account",
+                "path": "tournament_entry.puzzle_nonce",
+                "account": "TournamentEntry"
               }
             ]
           }
         }
       ],
-      "args": [
-        {
-          "name": "elapsed_secs",
-          "type": "u64"
-        },
-        {
-          "name": "move_count",
-          "type": "u32"
-        }
-      ]
+      "args": []
     },
     {
       "name": "start_puzzle",
@@ -2477,6 +2726,18 @@
           {
             "name": "duration_secs",
             "type": "i64"
+          },
+          {
+            "name": "max_time_secs",
+            "type": "u64"
+          },
+          {
+            "name": "num_tubes",
+            "type": "u8"
+          },
+          {
+            "name": "balls_per_tube",
+            "type": "u8"
           }
         ]
       }
@@ -2857,6 +3118,10 @@
             "type": "pubkey"
           },
           {
+            "name": "token_mint",
+            "type": "pubkey"
+          },
+          {
             "name": "entry_fee",
             "type": "u64"
           },
@@ -2875,6 +3140,18 @@
           {
             "name": "difficulty",
             "type": "u8"
+          },
+          {
+            "name": "num_tubes",
+            "type": "u8"
+          },
+          {
+            "name": "balls_per_tube",
+            "type": "u8"
+          },
+          {
+            "name": "max_time_secs",
+            "type": "u64"
           },
           {
             "name": "start_time",
@@ -2978,6 +3255,10 @@
           },
           {
             "name": "entry_deposit",
+            "type": "u64"
+          },
+          {
+            "name": "puzzle_nonce",
             "type": "u64"
           },
           {

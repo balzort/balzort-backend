@@ -389,6 +389,28 @@ export type Balzort = {
           "signer": true
         },
         {
+          "name": "playerAccount",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
           "name": "tournament",
           "writable": true,
           "pda": {
@@ -405,6 +427,43 @@ export type Balzort = {
                   109,
                   101,
                   110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenMint"
+        },
+        {
+          "name": "tournamentVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
                   116
                 ]
               },
@@ -452,6 +511,13 @@ export type Balzort = {
               }
             ]
           }
+        },
+        {
+          "name": "playerTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram"
         },
         {
           "name": "systemProgram",
@@ -517,7 +583,8 @@ export type Balzort = {
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "payer",
+          "writable": true,
           "signer": true
         },
         {
@@ -549,6 +616,43 @@ export type Balzort = {
           }
         },
         {
+          "name": "tokenMint"
+        },
+        {
+          "name": "tournamentVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "tournament"
+              }
+            ]
+          }
+        },
+        {
           "name": "game",
           "pda": {
             "seeds": [
@@ -565,8 +669,11 @@ export type Balzort = {
           }
         },
         {
-          "name": "treasury",
+          "name": "treasuryTokenAccount",
           "writable": true
+        },
+        {
+          "name": "tokenProgram"
         },
         {
           "name": "systemProgram",
@@ -831,6 +938,9 @@ export type Balzort = {
           }
         },
         {
+          "name": "tokenMint"
+        },
+        {
           "name": "tournament",
           "writable": true,
           "pda": {
@@ -857,6 +967,43 @@ export type Balzort = {
               }
             ]
           }
+        },
+        {
+          "name": "tournamentVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game.tournament_count",
+                "account": "game"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram"
         },
         {
           "name": "systemProgram",
@@ -1676,6 +1823,11 @@ export type Balzort = {
       ],
       "accounts": [
         {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
           "name": "signer",
           "writable": true,
           "signer": true
@@ -1731,6 +1883,47 @@ export type Balzort = {
           }
         },
         {
+          "name": "tokenMint"
+        },
+        {
+          "name": "tournamentVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament.tournament_id",
+                "account": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "playerTokenAccount",
+          "writable": true
+        },
+        {
           "name": "tournamentEntry",
           "writable": true,
           "pda": {
@@ -1768,11 +1961,19 @@ export type Balzort = {
           }
         },
         {
+          "name": "tokenProgram"
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
       "name": "openSession",
@@ -1878,8 +2079,31 @@ export type Balzort = {
       ],
       "accounts": [
         {
-          "name": "player",
+          "name": "signer",
           "signer": true
+        },
+        {
+          "name": "player",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player.wallet",
+                "account": "player"
+              }
+            ]
+          }
         },
         {
           "name": "tournament",
@@ -1941,22 +2165,47 @@ export type Balzort = {
               },
               {
                 "kind": "account",
+                "path": "player.wallet",
+                "account": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "puzzleStats",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  122,
+                  122,
+                  108,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
                 "path": "player"
+              },
+              {
+                "kind": "account",
+                "path": "tournament_entry.puzzle_nonce",
+                "account": "tournamentEntry"
               }
             ]
           }
         }
       ],
-      "args": [
-        {
-          "name": "elapsedSecs",
-          "type": "u64"
-        },
-        {
-          "name": "moveCount",
-          "type": "u32"
-        }
-      ]
+      "args": []
     },
     {
       "name": "startPuzzle",
@@ -2483,6 +2732,18 @@ export type Balzort = {
           {
             "name": "durationSecs",
             "type": "i64"
+          },
+          {
+            "name": "maxTimeSecs",
+            "type": "u64"
+          },
+          {
+            "name": "numTubes",
+            "type": "u8"
+          },
+          {
+            "name": "ballsPerTube",
+            "type": "u8"
           }
         ]
       }
@@ -2863,6 +3124,10 @@ export type Balzort = {
             "type": "pubkey"
           },
           {
+            "name": "tokenMint",
+            "type": "pubkey"
+          },
+          {
             "name": "entryFee",
             "type": "u64"
           },
@@ -2881,6 +3146,18 @@ export type Balzort = {
           {
             "name": "difficulty",
             "type": "u8"
+          },
+          {
+            "name": "numTubes",
+            "type": "u8"
+          },
+          {
+            "name": "ballsPerTube",
+            "type": "u8"
+          },
+          {
+            "name": "maxTimeSecs",
+            "type": "u64"
           },
           {
             "name": "startTime",
@@ -2984,6 +3261,10 @@ export type Balzort = {
           },
           {
             "name": "entryDeposit",
+            "type": "u64"
+          },
+          {
+            "name": "puzzleNonce",
             "type": "u64"
           },
           {

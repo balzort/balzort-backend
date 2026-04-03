@@ -6,11 +6,14 @@ import { SEEDS, PROGRAM_ID } from "../../utils/constants.js";
 export interface TournamentData {
   address: string;
   authority: string;
+  tokenMint: string;
   entryFee: bigint;
   prizePool: bigint;
   netPrizePool: bigint;
   treasuryFeeBps: number;
   difficulty: number;
+  numTubes: number;
+  ballsPerTube: number;
   startTime: number;
   endTime: number;
   totalEntries: number;
@@ -56,11 +59,14 @@ export async function fetchTournamentByAddress(address: string): Promise<Tournam
     return {
       address,
       authority: account.authority.toBase58(),
+      tokenMint: account.tokenMint.toBase58(),
       entryFee: BigInt(account.entryFee.toString()),
       prizePool: BigInt(account.prizePool.toString()),
       netPrizePool: BigInt(account.netPrizePool.toString()),
       treasuryFeeBps: account.treasuryFeeBps,
       difficulty: account.difficulty,
+      numTubes: account.numTubes,
+      ballsPerTube: account.ballsPerTube,
       startTime: account.startTime.toNumber(),
       endTime: account.endTime.toNumber(),
       totalEntries: account.totalEntries,
@@ -98,11 +104,14 @@ export async function fetchAllOpenTournaments(): Promise<TournamentData[]> {
       return {
         address: a.publicKey.toBase58(),
         authority: account.authority.toBase58(),
+        tokenMint: account.tokenMint.toBase58(),
         entryFee: BigInt(account.entryFee.toString()),
         prizePool: BigInt(account.prizePool.toString()),
         netPrizePool: BigInt(account.netPrizePool.toString()),
         treasuryFeeBps: account.treasuryFeeBps,
         difficulty: account.difficulty,
+        numTubes: account.numTubes,
+        ballsPerTube: account.ballsPerTube,
         startTime: account.startTime.toNumber(),
         endTime: account.endTime.toNumber(),
         totalEntries: account.totalEntries,

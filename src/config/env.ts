@@ -16,9 +16,10 @@ const envSchema = z.object({
   // Solana
   RPC_URL: z.string().url(),
   PROGRAM_ID: z.string().default("7F8bQvi3ppn4i7APswRX23hUFuq41dtkguy8aWLLtic8"),
+  GAME_TOKEN_MINT: z.string().min(32).max(44),
 
-  // Helius
-  HELIUS_WEBHOOK_SECRET: z.string().min(1),
+  // Helius (deprecated — kept optional for backwards compat, can be removed from .env)
+  HELIUS_WEBHOOK_SECRET: z.string().optional(),
 
   // Admin
   ADMIN_WALLETS: z.string().default(""),

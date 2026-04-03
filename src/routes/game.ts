@@ -13,4 +13,13 @@ export async function gameRoutes(app: FastifyInstance): Promise<void> {
 
   // Prepare closeSession tx (closes session + frontend appends drain ix)
   app.post("/game/prepare-close-session", auth, GameController.prepareCloseSession);
+
+  // Prepare joinTournament tx
+  app.post("/game/prepare-join-tournament", auth, GameController.prepareJoinTournament);
+
+  // Prepare recordTournamentResult tx (session key signs — no popup)
+  app.post("/game/prepare-record-tournament-result", auth, GameController.prepareRecordTournamentResult);
+
+  // Prepare claimPrize tx (user signs internally)
+  app.post("/game/prepare-claim-prize", auth, GameController.prepareClaimPrize);
 }
