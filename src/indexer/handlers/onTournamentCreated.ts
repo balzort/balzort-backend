@@ -42,6 +42,8 @@ export async function onTournamentCreated(
       net_prize_pool:     tournamentData.netPrizePool.toString(),
       treasury_fee_bps:   tournamentData.treasuryFeeBps,
       difficulty:         tournamentData.difficulty,
+      num_tubes:          tournamentData.numTubes,
+      balls_per_tube:     tournamentData.ballsPerTube,
       start_time:         tournamentData.startTime,
       end_time:           tournamentData.endTime,
       total_entries:      tournamentData.totalEntries,
